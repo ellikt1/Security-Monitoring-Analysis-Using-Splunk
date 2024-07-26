@@ -25,13 +25,6 @@ Splunk was installed on an Ubuntu Server, serving as the central platform for da
 <br />
 
 
-
-<b>Credential Configuration:</b>
- 
- - The Nessus vulnerability scanner was configured to perform a credentialed scan. By providing valid Windows credentials, the scanner was able to authenticate to the target system. This approach allowed for a deeper and more comprehensive analysis of the virtual machine, as it could access system files, registry settings, and configuration details that are not available through non-credentialed scans. With credentialed access, Nessus conducted an in-depth evaluation of the virtual machine, checking for missing patches, misconfigurations, insecure settings, and outdated software versions. This comprehensive approach significantly enhanced the scanner's ability to uncover vulnerabilities that would otherwise remain hidden in a standard, non-credentialed scan.
-
-By configuring the Nessus scanner in this manner, the assessment provided a thorough understanding of the security posture of the Windows 10 host, enabling the identification of both surface-level and deep-rooted vulnerabilities. This comprehensive approach ensured that the findings were detailed and actionable, leading to more effective remediation strategies.
-
 <p align="center">
 Configuring the Scan <br/>
 <img src="https://i.imgur.com/NDEx8CI.png" height="80%" width="80%" alt="Operating System Deployment"/>
