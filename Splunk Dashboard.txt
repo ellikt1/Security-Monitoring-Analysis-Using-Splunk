@@ -1,0 +1,145 @@
+<dashboard version="1.1" theme="dark">
+  <!-- The title of the dashboard -->
+  <label>Login Activity and Security Overview</label>
+
+  <!-- Row for displaying single value panels -->
+  <row>
+    <panel>
+      <!-- Title for the panel showing failed login count -->
+      <title>Failed Logins</title>
+      <single>
+        <search>
+          <!-- Query to count the number of failed login attempts in the current week -->
+          <query>index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 earliest=@w0 | stats count as "Failed Logins"</query>
+        </search>
+        <!-- Options for single value visualization -->
+        <option name="colorMode">block</option> <!-- Color the whole block -->
+        <option name="drilldown">all</option> <!-- Enable drilldown on click -->
+        <option name="numberPrecision">0</option> <!-- No decimal places -->
+        <option name="rangeColors">["0xd41f1f","0xd41f1f","0xd41f1f","0xd41f1f","0xd41f1f"]</option> <!-- Red color range -->
+        <option name="useColors">1</option> <!-- Use colors for visualization -->
+        <drilldown>
+          <!-- Link to a detailed report when clicking on the single value -->
+          <link target="_blank">/app/search/report?s=Failed%20Logins%20of%20The%20Week</link>
+        </drilldown>
+      </single>
+    </panel>
+    
+    <panel>
+      <!-- Title for the panel showing weekly login success rate -->
+      <title>Weekly Login Success Rate</title>
+      <single>
+        <search>
+          <!-- Query to calculate the login success rate for the current week -->
+          <query>
+        (index=wineventlog sourcetype="wineventlog:security" EventCode=4624 Logon_Type IN (2,7,10,11) NOT user IN ("DWM-*", "UMFD-*") earliest=@w0)
+        OR 
+        (index=wineventlog sourcetype="wineventlog:security" EventCode=4625 earliest=@w0)
+        | eval Success=if(EventCode=4624, 1, 0) 
+        | stats sum(Success) as successful, count as total 
+        | eval success_rate=round(successful*100/total, 2) 
+        | fields success_rate
+      </query>
+        </search>
+        <!-- Options for single value visualization -->
+        <!-- Use a valid precision format -->
+        <option name="colorMode">block</option> <!-- Color the whole block -->
+        <option name="numberPrecision">0.00</option> <!-- Show two decimal places -->
+        <option name="rangeColors">["0x2ca02c","0xd41f1f","0xd41f1f","0xcba700","0x2ca02c"]</option> <!-- Green to red color range -->
+        <option name="useColors">1</option> <!-- Use colors for visualization -->
+      </single>
+    </panel>
+  </row>
+  
+  <!-- Row for displaying table of failed login attempts -->
+  <row>
+    <panel>
+      <!-- Title for the panel showing details of this week's failed login attempts -->
+      <title>This Week's Failed Login Attempts</title>
+      <table>
+        <search>
+          <!-- Query to list details of failed login attempts in the current week -->
+          <query>
+                index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 earliest=@w0
+                | eval date=strftime(_time,"%m/%d/%Y")
+                | eval time=strftime(_time, "%I:%M:%S:%p")
+                | table date, time, ComputerName, Account_Name, Failure_Reason
+                | rename date as "Date", Account_Name as "Account Name", time as "Time", Failure_Reason as "Information"
+                | sort - Date, -Time
+            </query>
+        </search>
+        <option name="count">10</option> <!-- Number of rows to display -->
+      </table>
+    </panel>
+  </row>
+
+  <!-- Row for displaying time-based and hourly analysis charts -->
+  <row>
+    <panel>
+      <!-- Title for the panel showing failed login attempts over time -->
+      <title>Failed Login Attempts Over Time</title>
+      <chart>
+        <search>
+          <!-- Query to display a time chart of failed login attempts -->
+          <query>index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 | timechart span=1h count by status</query>
+        </search>
+        <option name="charting.chart">line</option> <!-- Use a line chart -->
+        <drilldown>
+          <!-- Link to a detailed search when clicking on the chart -->
+          <link target="_blank">search?q=index%3D%22wineventlog%22%20sourcetype%3D%22wineventlog%3Asecurity%22%20EventCode%3D4625%20%7C%20timechart%20span%3D1h%20count%20by%20status&amp;earliest=$earliest$&amp;latest=$latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+    
+    <panel>
+      <!-- Title for the panel showing distribution of failed login attempts by hour -->
+      <title>Failed Login Hours</title>
+      <chart>
+        <search>
+          <!-- Query to display a chart of failed login attempts by hour -->
+          <query>index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 earliest=@w0 | eval hour=strftime(_time, "%l %p") | stats count by hour</query>
+        </search>
+        <option name="charting.chart">column</option> <!-- Use a column chart -->
+        <drilldown>
+          <!-- Link to a detailed search when clicking on the chart -->
+          <link target="_blank">search?q=index%3D%22wineventlog%22%20sourcetype%3D%22wineventlog%3Asecurity%22%20EventCode%3D4625%20earliest%3D%40w0%20%7C%20eval%20hour%3Dstrftime(_time%2C%20%22%25l%20%25p%22)%20%7C%20stats%20count%20by%20hour&amp;earliest=$earliest$&amp;latest=$latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- Row for displaying top users and account analysis charts -->
+  <row>
+    <panel>
+      <!-- Title for the panel showing top users by failed login attempts -->
+      <title>Top Users by Failed Logins</title>
+      <chart>
+        <search>
+          <!-- Query to display a bar chart of top users by failed logins -->
+          <query>index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 earliest=@w0 | stats count by Account_Name | sort -count | head 10</query>
+        </search>
+        <option name="charting.chart">bar</option> <!-- Use a bar chart -->
+        <drilldown>
+          <!-- Link to a detailed search when clicking on the chart -->
+          <link target="_blank">search?q=index%3D%22wineventlog%22%20sourcetype%3D%22wineventlog%3Asecurity%22%20EventCode%3D4625%20earliest%3D%40w0%20%7C%20stats%20count%20by%20Account_Name%20%7C%20sort%20-count%20%7C%20head%2010&amp;earliest=$earliest$&amp;latest=$latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+    
+    <panel>
+      <!-- Title for the panel showing failed login accounts -->
+      <title>Failed Login Accounts</title>
+      <chart>
+        <search>
+          <!-- Query to display a pie chart of failed login accounts -->
+          <query>index="wineventlog" sourcetype="wineventlog:security" EventCode=4625 earliest=@w0 | eval Acct=mvindex(Account_Name,1) | stats count by Acct</query>
+        </search>
+        <option name="charting.chart">pie</option> <!-- Use a pie chart -->
+        <drilldown>
+          <!-- Link to a detailed search when clicking on the chart -->
+          <link target="_blank">search?q=index%3D%22wineventlog%22%20sourcetype%3D%22wineventlog%3Asecurity%22%20EventCode%3D4625%20earliest%3D%40w0%20%7C%20eval%20Acct%3Dmvindex(Account_Name%2C1)%20%7C%20stats%20count%20by%20Acct&amp;earliest=$earliest$&amp;latest=$latest$</link>
+        </drilldown>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
