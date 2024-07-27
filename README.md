@@ -1,6 +1,6 @@
 <h1>Security Monitoring & Analysis Using Splunk</h1>
 
- <img src="https://i.imgur.com/kpG6B6z.png" alt="Microsoft Endpoint Configuration Manager" class="header-image">
+ <img src="https://i.imgur.com/nLAyCbi.png" alt="Microsoft Endpoint Configuration Manager" class="header-image">
 
 <h2>Description</h2>
 The IAM Login Activity and Security Insights Dashboard is a comprehensive tool designed to enhance the monitoring and analysis of user authentication activities within an organization's IT environment. Built using Splunk, this dashboard provides real-time insights into both successful and failed login attempts, offering valuable information for improving security and ensuring compliance with identity and access management (IAM) policies.
@@ -27,11 +27,11 @@ Splunk was installed on an Ubuntu Server, serving as the central platform for da
 
 <p align="center">
 Configuring the Scan <br/>
-<img src="https://i.imgur.com/NDEx8CI.png" height="80%" width="80%" alt="Operating System Deployment"/>
+<img src="https://i.imgur.com/hoHUXEX.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
 <p align="center">
 Configuring the Scan cont. <br/>
-<img src="https://i.imgur.com/305bLyK.png" height="80%" width="80%" alt="Operating System Deployment"/>
+<img src="https://i.imgur.com/5tsnDF1.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
  
 
@@ -60,86 +60,7 @@ Outdated Microsoft Edge:
 
 <p align="center">
 Scan 1 Vulnerabilities <br/>
-<img src="https://i.imgur.com/7qPDh8p.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-<p align="center">
-Scan 1 Vulnerabilities cont. <br/>
-<img src="https://i.imgur.com/pQWuBiQ.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-<p align="center">
-Scan 1 Vulnerabilities cont. <br/>
-<img src="https://i.imgur.com/krWo0MR.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-
-
-
-
-
-
-
-<h2>Initial Remediations </h2>
-The goal was to remediate all critical and high vulnerabilities. The remediation process involved the following steps:
-
-<b>Applying Microsoft Security Updates:</b>
-- Ensure the Windows Update service was enabled and fully functional.
-- Manually initiated the update process to apply all pending critical security updates.
-- Configured automatic updates to ensure future updates would be applied promptly.
-
-<b>Updating Microsoft Edge:</b>
-- Downloaded and installed the latest version of Microsoft Edge from the official Microsoft website.
-- Enabled automatic updates for Edge to ensure it remains up-to-date.
-
-<b>Updating Microsoft Store Apps:</b>
-- Updated all Microsoft-installed apps through the Microsoft Store, including addressing vulnerabilities in Microsoft 365 Office apps.
-- This step was crucial to mitigate specific critical vulnerabilities found in these applications.
-
-<b>Updating Microsoft Software:</b>
-- Performed a comprehensive update of all Microsoft software to the latest versions.
-- This included addressing critical vulnerabilities due to absent security updates across various Microsoft products.
-
-<b>Re-scanning and Verification:</b>
-- After applying the necessary updates, a re-scan was conducted using Tenable Nessus to verify that the critical and high vulnerabilities had been successfully remediated.
-- The re-scan confirmed a significant reduction in the number of critical and high vulnerabilities, demonstrating the effectiveness of the remediation efforts.
-
-<p align="center">
-Nessus Suggested Remediations <br/>
-<img src="https://i.imgur.com/qKCKm07.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-
-
-
-
-<h2>Scan 2 </h2>
-The second scan resulted in 124 vulnerabilities, with 1 critical vulnerability and 1 high vulnerability. The critical vulnerability was due to Microsoft Internet Explorer lacking support for new security patches. Nessus marked this vulnerability as critical because it likely contained multiple security issues. The recommended solution was to either upgrade to a supported version of Internet Explorer or disable it. I decided to disable Internet Explorer because the virtual machine already had supported and reliable versions of both Microsoft Edge and Google Chrome as web browsers. 
-
-I disabled Internet Explorer by opening Command Prompt as an administrator and using the following command I found on [Microsoft Learn](https://learn.microsoft.com/en-us/troubleshoot/developer/browsers/installation/disable-internet-explorer-windows):
-dism /online /Remove-Capability /CapabilityName:Browser.InternetExplorer~~~~0.0.11.0.
-
-
-The high vulnerability was WinVerifyTrust Signature Validation CVE-2013-3900. The remote system might be vulnerable to CVE-2013-3900 due to missing or misconfigured registry keys. The recommended action, which I found through [Nessus](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2013-3900), was to add "EnableCertPaddingCheck"="1" to the following registry file path: [HKEY_LOCAL_MACHINE\Software\Microsoft\Cryptography\Wintrust\Config]. 
-
-To implement this, I added the following text to Notepad and saved it as enableAuthenticodeVerification64.reg and restarted the VM:
-
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Cryptography\Wintrust\Config]   "EnableCertPaddingCheck"="1"
-[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Cryptography\Wintrust\Config] "EnableCertPaddingCheck"="1"
-
-<p align="center">
-Scan 2 Vulnerabilities <br/>
-<img src="https://i.imgur.com/UQfjpdW.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-
-<h2>Final Scan </h2>
-The third and final scan returned only 9 vulnerabilities, with none being critical or high.
-<br />
-<br />
-
-This project demonstrated the effectiveness of using Tenable Nessus for identifying and remediating vulnerabilities on a Windows 10 virtual machine. Through a series of scans and targeted remediation actions, I successfully reduced the number of vulnerabilities from 392 to just 9, with no critical or high vulnerabilities remaining. This highlights the importance of regular vulnerability assessments and timely updates to maintain a secure IT environment.
-
-<p align="center">
-Final Scan Vulnerabilities <br/>
-<img src="https://i.imgur.com/TcQPJHh.png" height="80%" width="80%" alt="Operating System Deployment"/>
-
-
+<img src="https://i.imgur.com/PuR7IXg.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
 
 
