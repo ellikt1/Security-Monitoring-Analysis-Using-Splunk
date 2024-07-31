@@ -26,42 +26,48 @@ Splunk was installed on an Ubuntu Server, serving as the central platform for da
 
 
 <p align="center">
-Configuring the Scan <br/>
+ IAM Dashboard<br/>
 <img src="https://i.imgur.com/hoHUXEX.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
 <p align="center">
-Configuring the Scan cont. <br/>
+IAM Dashboard Cont. <br/>
 <img src="https://i.imgur.com/5tsnDF1.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
  
 
-<h2>Initial Scan </h2>
-The initial scan revealed a total of 392 vulnerabilities, categorized as follows:
+<h2>Dashboard Description </h2>
 
-- <b>Critical Vulnerabilities: 33</b>
+### Failed Logins Panel
+This panel shows the total number of failed login attempts for the current week. The data is displayed in a red color scheme to highlight the critical nature of failed logins. Users can click on the value to drill down into a detailed report of these login failures.
+
+### Weekly Login Success Rate Panel
+This panel calculates and displays the success rate of logins for the current week, shown as a percentage with two decimal places. The color scheme ranges from green to red, indicating the success rate level.
+
+### Failed Login Attempts Over Time Chart
+This line chart visualizes the trend of failed login attempts over time, updated hourly. Users can click on the chart to access a more detailed search view.
+
+### Failed Login Hours Chart
+This column chart shows the distribution of failed login attempts by the hour of the day, helping identify patterns in unsuccessful access attempts. A detailed search view is available through a drilldown link.
+
+### Top Users by Failed Logins Chart
+This bar chart identifies the top 10 users with the most failed login attempts for the week. It allows security teams to focus on potentially compromised accounts.
+
+### Failed Login Accounts Chart
+This pie chart breaks down the accounts with failed login attempts, providing a visual representation of which accounts are frequently targeted.
 
 
-- <b>High Vulnerabilities: 119</b>
-
-
-- <b>Medium, Low, and Informational Vulnerabilities: 240</b>
-
-Missing Microsoft Security Updates:
-
-- A substantial number of critical vulnerabilities were due to missing security updates from Microsoft. These updates are essential as they often contain patches for recently discovered security flaws that can be exploited by attackers.
-
-- Specific examples included vulnerabilities in Windows operating system components that could allow for remote code execution, privilege escalation, and other severe impacts.
-
-Outdated Microsoft Edge:
-
-- Another significant portion of critical vulnerabilities was related to the outdated Microsoft Edge browser. An outdated browser can have multiple security holes that might be exploited to compromise the system.
-
-- The identified issues included vulnerabilities that could be used for remote code execution, information disclosure, and bypassing security features.
+<br />
+<br />
+<br />
+<br />
 
 <p align="center">
-Scan 1 Vulnerabilities <br/>
+Better View of This Week's Failed Login Attempts Table  <br/>
 <img src="https://i.imgur.com/PuR7IXg.png" height="100%" width="100%" alt="Operating System Deployment"/>
 
+
+### This Week's Failed Login Attempts Table
+This table lists detailed information about each failed login attempt from the current week, including the date, time, computer name, account name, and failure reason. It provides a sorted view for easy analysis.
 
 
 <br />
